@@ -1,0 +1,61 @@
+# openFrameworks
+bin/
+obj/
+*.o
+*.d
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Build directories
+build/
+Debug/
+Release/
+
+# IDE files
+*.xcodeproj/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*~
+*.tmp
+*.temp
+
+# Addons (keep structure but ignore compiled objects)
+addons/*/obj/
+addons/*/libs/
+
+# Keep data folder but ignore large files
+bin/data/*.ttf
+bin/data/*.png
+bin/data/*.jpg
+bin/data/*.jpeg
+bin/data/*.gif
+bin/data/*.mp3
+bin/data/*.wav
+bin/data/*.mov
+bin/data/*.mp4
+
+# Keep .gitkeep files
+!bin/data/.gitkeep

@@ -10,6 +10,7 @@ void ofApp::setup(){
     isLoading = false;
     hasPokemonData = false;
     hasListData = false;
+    showList = false;  // Nueva variable para controlar visibilidad
     currentPokemonId = 1;
     scrollOffset = 0;
     loadingMessage = "Cargando...";
@@ -34,7 +35,7 @@ void ofApp::setup(){
     gui.add(nextPokemonBtn.setup("Siguiente Pokémon"));
     gui.add(prevPokemonBtn.setup("Anterior Pokémon"));
     gui.add(randomPokemonBtn.setup("Pokémon Aleatorio"));
-    gui.add(loadListBtn.setup("Cargar Lista"));
+    gui.add(loadListBtn.setup("Mostrar/Ocultar Lista"));
     gui.add(pokemonIdSlider.setup("ID Pokémon", 1, 1, 151));
     gui.add(statusLabel.setup("Estado", "Listo"));
     
@@ -99,8 +100,13 @@ void ofApp::keyPressed(int key){
             break;
         case 'l':
         case 'L':
-            // L para cargar lista
-            loadPokemonList();
+            // L para mostrar/ocultar lista
+            if (hasListData) {
+                showList = !showList;
+            } else {
+                loadPokemonList();
+                showList = true;
+            }
             break;
         case 'n':
         case 'N':
@@ -134,9 +140,10 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY){
-    if (hasListData) {
-        scrollOffset += scrollY * 20;
-        int maxScroll = max(0, (int)pokemonListData["results"].size() - 25);
+    if (hasListData && showList) {
+        scrollOffset += scrollY * 30;  // Aumentar sensibilidad del scroll
+        int itemsToShow = 15;
+        int maxScroll = max(0, (int)pokemonListData["results"].size() - itemsToShow) * 25;
         scrollOffset = ofClamp(scrollOffset, 0, maxScroll);
     }
 }
@@ -171,7 +178,7 @@ void ofApp::loadPokemonList() {
     errorMessage = "";
     
     ofxJSON response;
-    string url = "https://pokeapi.co/api/v2/pokemon?limit=50&offset=" + ofToString(scrollOffset);
+    string url = "https://pokeapi.co/api/v2/pokemon?limit=151&offset=0";
     
     if (response.open(url)) {
         pokemonListData = response;
@@ -189,8 +196,8 @@ void ofApp::loadPokemonList() {
 void ofApp::drawPokemonInfo() {
     if (!hasPokemonData) return;
 
-    // Ajustar posición basada en si hay lista visible
-    float infoX = hasListData ? 50 : 380;
+    // Ajustar posición basada en si la lista está visible
+    float infoX = (hasListData && showList) ? 50 : 380;
     float infoY = 80;
 
     // --- Nombre y ID ---
@@ -256,7 +263,7 @@ void ofApp::drawPokemonInfo() {
 
 //--------------------------------------------------------------
 void ofApp::drawPokemonList() {
-    if (!hasListData) return;
+    if (!hasListData || !showList) return;
     
     // Posición fija en el lado derecho
     float listX = ofGetWidth() - 300;
@@ -307,6 +314,13 @@ void ofApp::drawPokemonList() {
 
 //--------------------------------------------------------------
 void ofApp::drawUI() {
+    // Ajustar posición del GUI si la lista está visible
+    if (hasListData && showList) {
+        gui.setPosition(10, 10);  // Mover GUI a la esquina superior izquierda
+    } else {
+        gui.setPosition(10, 10);  // Posición normal
+    }
+    
     // Dibujar la GUI
     gui.draw();
     
@@ -322,6 +336,11 @@ void ofApp::drawUI() {
         statusLabel = "Pokémon cargado: " + pokemonData["name"].asString();
     } else {
         statusLabel = "Listo";
+    }
+    
+    // Mostrar instrucciones
+    if (hasListData) {
+        drawText("Presiona 'L' para mostrar/ocultar lista", 10, ofGetHeight() - 30, smallFont, ofColor(150));
     }
 }
 
@@ -374,7 +393,12 @@ void ofApp::onRandomPokemon() {
 }
 
 void ofApp::onLoadList() {
-    loadPokemonList();
+    if (hasListData) {
+        showList = !showList;
+    } else {
+        loadPokemonList();
+        showList = true;
+    }
 }
 
 void ofApp::onPokemonIdChanged(int &pokemonId) {

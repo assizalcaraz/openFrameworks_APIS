@@ -4,7 +4,7 @@
 .PHONY: help build run clean install-addons setup check-env debug release install-deps status test install package dev
 
 # Variables
-APP_NAME = PokemonAPI
+APP_NAME = of_apis_project2
 BUILD_DIR = bin
 ADDONS_DIR = addons
 REQUIRED_ADDONS = ofxJSON ofxHTTP ofxNetworkUtils ofxHTTPForm

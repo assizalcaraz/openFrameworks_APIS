@@ -36,11 +36,16 @@ Thumbs.db
 
 # Logs
 *.log
+logs/
 
 # Temporary files
 *~
 *.tmp
 *.temp
+
+# Build artifacts
+obj/
+build/
 
 # Addons (keep structure but ignore compiled objects)
 addons/*/obj/

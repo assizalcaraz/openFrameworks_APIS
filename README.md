@@ -80,8 +80,30 @@ make -f Makefile.dev status   # Estado del proyecto
 ```
 
 ### Addons Utilizados
-- `ofxJSON` - Para parsing de JSON
+- `ofxJSON` - Para parsing de JSON y llamados HTTP
 - `ofxGui` - Para interfaz de usuario
+
+### Configuración de la API
+La aplicación consume la **PokeAPI** con los siguientes endpoints:
+
+- **Pokémon individual**: `https://pokeapi.co/api/v2/pokemon/{id}`
+- **Lista completa**: `https://pokeapi.co/api/v2/pokemon?limit=151&offset=0`
+
+#### Funciones de API:
+- `loadPokemon(int id)` - Carga un Pokémon específico
+- `loadPokemonList()` - Carga lista de 151 Pokémon
+- **Llamados síncronos** usando `ofxJSON::open(url)`
+- **Manejo de estados** con variables booleanas
+- **Manejo de errores** con mensajes al usuario
+
+#### Estructura de Datos:
+```cpp
+ofxJSON pokemonData;        // Datos de Pokémon individual
+ofxJSON pokemonListData;    // Lista de todos los Pokémon
+bool isLoading;             // Estado de carga
+bool hasPokemonData;        // Datos cargados
+bool hasListData;           // Lista cargada
+```
 
 ## 🎨 Características de la UI
 

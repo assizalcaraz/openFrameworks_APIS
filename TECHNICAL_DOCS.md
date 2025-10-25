@@ -34,15 +34,144 @@ La clase `ofApp` hereda de `ofBaseApp` y maneja toda la lógica de la aplicació
 - `drawPokemonList()`: Renderiza lista de Pokémon
 - `drawUI()`: Renderiza interfaz de usuario
 
-## 🔌 Integración con APIs
+## 🔌 Configuración y Llamados de la API
 
-### PokeAPI Integration
-- **Base URL**: `https://pokeapi.co/api/v2/`
-- **Endpoints**:
-  - `/pokemon/{id}`: Información de Pokémon específico
-  - `/pokemon?limit=50&offset={offset}`: Lista de Pokémon
-- **Método**: HTTP GET usando ofxJSON
-- **Formato**: JSON response
+### 1. Configuración de Variables de API
+
+**Ubicación**: `src/ofApp.h` (líneas 40-46)
+
+```cpp
+// Variables de la API
+ofxJSON pokemonData;        // Almacena datos de un Pokémon individual
+ofxJSON pokemonListData;    // Almacena la lista de todos los Pokémon
+bool isLoading;             // Estado de carga
+bool hasPokemonData;        // Indica si hay datos de Pokémon cargados
+bool hasListData;           // Indica si hay lista de Pokémon cargada
+bool showList;              // Controla visibilidad de la lista
+string loadingMessage;      // Mensaje de estado durante carga
+string errorMessage;        // Mensaje de error si falla la carga
+```
+
+### 2. Funciones de Llamados a la API
+
+#### A) Cargar Pokémon Individual
+**Ubicación**: `src/ofApp.cpp` (líneas 152-172)
+
+```cpp
+void ofApp::loadPokemon(int pokemonId) {
+    isLoading = true;
+    loadingMessage = "Cargando Pokemon #" + ofToString(pokemonId) + "...";
+    errorMessage = "";
+    
+    // Configuración de la URL de la API
+    ofxJSON response;
+    string url = "https://pokeapi.co/api/v2/pokemon/" + ofToString(pokemonId);
+    
+    // Llamado síncrono a la API
+    if (response.open(url)) {
+        pokemonData = response;           // Guarda los datos JSON
+        hasPokemonData = true;           // Marca como cargado
+        currentPokemonId = pokemonId;    // Actualiza ID actual
+        errorMessage = "";
+    } else {
+        errorMessage = "Error al cargar Pokemon #" + ofToString(pokemonId);
+        hasPokemonData = false;
+    }
+    
+    isLoading = false;
+}
+```
+
+#### B) Cargar Lista de Pokémon
+**Ubicación**: `src/ofApp.cpp` (líneas 175-193)
+
+```cpp
+void ofApp::loadPokemonList() {
+    isLoading = true;
+    loadingMessage = "Cargando lista de Pokemon...";
+    errorMessage = "";
+    
+    // Configuración de la URL para lista completa
+    ofxJSON response;
+    string url = "https://pokeapi.co/api/v2/pokemon?limit=151&offset=0";
+    
+    // Llamado síncrono a la API
+    if (response.open(url)) {
+        pokemonListData = response;      // Guarda la lista JSON
+        hasListData = true;             // Marca como cargada
+        errorMessage = "";
+    } else {
+        errorMessage = "Error al cargar lista de Pokemon";
+        hasListData = false;
+    }
+    
+    isLoading = false;
+}
+```
+
+### 3. Funcionamiento del Sistema de API
+
+#### Flujo de Trabajo:
+1. **Inicialización**: En `setup()` se carga automáticamente el primer Pokémon
+2. **Llamados Síncronos**: Se usa `ofxJSON::open(url)` que es bloqueante
+3. **Manejo de Estados**: Variables booleanas controlan qué datos están disponibles
+4. **Manejo de Errores**: Se capturan errores y se muestran mensajes al usuario
+
+#### URLs de la API Utilizadas:
+- **Pokémon individual**: `https://pokeapi.co/api/v2/pokemon/{id}`
+- **Lista completa**: `https://pokeapi.co/api/v2/pokemon?limit=151&offset=0`
+
+#### Dependencias:
+- **`ofxJSON`**: Addon de openFrameworks para manejar JSON
+- **`ofxGui`**: Addon para la interfaz de usuario
+
+### 4. Estructura de Datos JSON
+
+#### Pokémon Individual:
+```json
+{
+  "name": "bulbasaur",
+  "id": 1,
+  "height": 7,
+  "weight": 69,
+  "types": [{"type": {"name": "grass"}}],
+  "abilities": [{"ability": {"name": "overgrow"}}],
+  "stats": [{"base_stat": 45, "stat": {"name": "hp"}}]
+}
+```
+
+#### Lista de Pokémon:
+```json
+{
+  "results": [
+    {"name": "bulbasaur", "url": "https://pokeapi.co/api/v2/pokemon/1/"},
+    {"name": "ivysaur", "url": "https://pokeapi.co/api/v2/pokemon/2/"}
+  ]
+}
+```
+
+### 5. Puntos de Mejora Identificados
+
+**Problema Actual**: Los llamados son **síncronos**, lo que congela la aplicación durante la carga.
+
+**Solución Recomendada**: Implementar `ofURLFileLoader` para llamados **asíncronos**:
+
+```cpp
+// Ejemplo de implementación asíncrona (no implementada aún)
+ofURLFileLoader urlLoader;
+
+void ofApp::loadPokemonAsync(int pokemonId) {
+    string url = "https://pokeapi.co/api/v2/pokemon/" + ofToString(pokemonId);
+    urlLoader.load(url);  // No bloquea la aplicación
+}
+
+void ofApp::urlResponse(ofHttpResponse & response) {
+    // Se ejecuta cuando la respuesta llega
+    if (response.status == 200) {
+        // Procesar datos...
+    }
+}
+```
 
 ### Manejo de Datos
 ```cpp

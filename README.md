@@ -4,7 +4,7 @@ Una aplicación de escritorio desarrollada en openFrameworks para explorar datos
 
 ## 📸 Captura de Pantalla
 
-![PokéAPI Explorer](screenshot.png)
+![PokéAPI Explorer](https://raw.githubusercontent.com/assizalcaraz/openFrameworks_APIS/master/screenshot.png)
 
 *Interfaz de la aplicación mostrando información detallada de Squirtle (ID: 7) con controles de navegación y estadísticas base.*
 

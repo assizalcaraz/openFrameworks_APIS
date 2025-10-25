@@ -24,6 +24,11 @@ Release/
 *.user
 *.userosscache
 *.sln.docstates
+*.code-workspace
+.vscode/
+Project.xcconfig
+*.entitlements
+openFrameworks-Info.plist
 
 # OS generated files
 .DS_Store

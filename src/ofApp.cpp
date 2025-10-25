@@ -338,10 +338,13 @@ void ofApp::drawUI() {
         statusLabel = "Listo";
     }
     
-    // Mostrar instrucciones
-    if (hasListData) {
-        drawText("Presiona 'L' para mostrar/ocultar lista", 10, ofGetHeight() - 30, smallFont, ofColor(150));
-    }
+    // Mostrar instrucciones completas
+    float instructionsY = ofGetHeight() - 80;
+    drawText("Controles:", 10, instructionsY, smallFont, ofColor(200));
+    drawText("N: Siguiente Pokémon (hasta el 151)", 10, instructionsY + 15, smallFont, ofColor(150));
+    drawText("P: Anterior Pokémon (desde el 1)", 10, instructionsY + 30, smallFont, ofColor(150));
+    drawText("R: Pokémon Aleatorio (1-151)", 10, instructionsY + 45, smallFont, ofColor(150));
+    drawText("L: Mostrar/Ocultar Lista (151 Pokémon)", 10, instructionsY + 60, smallFont, ofColor(150));
 }
 
 //--------------------------------------------------------------

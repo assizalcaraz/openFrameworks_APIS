@@ -112,7 +112,9 @@ Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 
 ## 👨‍💻 Autor
 
-Desarrollado como parte del curso de Programación y Algoritmos - UNA 2025.
+**Assiz Alcaraz Baxter**
+
+Desarrollado como parte de la materia "Imagen y sonido en tiempo real" - UNA 2025.
 
 ---
 

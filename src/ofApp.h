@@ -41,6 +41,7 @@ class ofApp : public ofBaseApp{
 		bool isLoading;
 		bool hasPokemonData;
 		bool hasListData;
+		bool showList;  // Controla si la lista está visible
 		string loadingMessage;
 		string errorMessage;
 		

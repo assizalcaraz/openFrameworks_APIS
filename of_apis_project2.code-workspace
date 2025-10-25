@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "${workspaceRoot}/../../../../libs/openFrameworks"
+		},
+		{
+			"path": "${workspaceRoot}/../../../../Documents/UNA/POSGRADO/2025_1/PyA/of_v0.12.1_osx_release/addons/ofxPoco"
+		},
+		{
+			"path": "${workspaceRoot}/../../../../Documents/UNA/POSGRADO/2025_1/PyA/of_v0.12.1_osx_release/addons/ofxNetworkUtils"
+		},
+		{
+			"path": "${workspaceRoot}/../../../../Documents/UNA/POSGRADO/2025_1/PyA/of_v0.12.1_osx_release/addons/ofxHTTP"
+		},
+		{
+			"path": "${workspaceRoot}/../../../../Documents/UNA/POSGRADO/2025_1/PyA/of_v0.12.1_osx_release/addons/ofxHTTPForm"
+		},
+		{
+			"path": "${workspaceRoot}/../../../../Documents/UNA/POSGRADO/2025_1/PyA/of_v0.12.1_osx_release/addons/ofxJSON"
+		}
+	],
+	"openFrameworksProjectGeneratorVersion": "0.103.0",
+	"settings": {}
+}

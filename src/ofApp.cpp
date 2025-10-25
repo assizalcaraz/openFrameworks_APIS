@@ -11,9 +11,7 @@ void ofApp::setup(){
     hasPokemonData = false;
     hasListData = false;
     currentPokemonId = 1;
-    selectedPokemonIndex = 0;
     scrollOffset = 0;
-    pokemonPerPage = 10;
     loadingMessage = "Cargando...";
     errorMessage = "";
     
@@ -129,62 +127,18 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     // ofxGui maneja los clics automáticamente
     // Los callbacks se ejecutan cuando se presionan los botones
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY){
     if (hasListData) {
         scrollOffset += scrollY * 20;
-        scrollOffset = ofClamp(scrollOffset, 0, max(0, (int)pokemonListData["results"].size() - pokemonPerPage));
+        int maxScroll = max(0, (int)pokemonListData["results"].size() - 25);
+        scrollOffset = ofClamp(scrollOffset, 0, maxScroll);
     }
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
 }
 
 //--------------------------------------------------------------
@@ -235,7 +189,8 @@ void ofApp::loadPokemonList() {
 void ofApp::drawPokemonInfo() {
     if (!hasPokemonData) return;
 
-    float infoX = 380;
+    // Ajustar posición basada en si hay lista visible
+    float infoX = hasListData ? 50 : 380;
     float infoY = 80;
 
     // --- Nombre y ID ---
@@ -303,16 +258,27 @@ void ofApp::drawPokemonInfo() {
 void ofApp::drawPokemonList() {
     if (!hasListData) return;
     
-    float listX = ofGetWidth() - 320;
+    // Posición fija en el lado derecho
+    float listX = ofGetWidth() - 300;
     float listY = 80;
+    
+    // Fondo para la lista
+    ofSetColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 200);
+    ofDrawRectRounded(listX - 10, listY - 10, 290, 400, 8);
+    
+    // Borde
+    ofSetColor(accentColor);
+    ofNoFill();
+    ofDrawRectRounded(listX - 10, listY - 10, 290, 400, 8);
+    ofFill();
     
     drawText("Lista de Pokémon", listX, listY, bodyFont, accentColor);
     
     listY += 40;
     
-    // Usamos el scrollOffset para determinar el rango a mostrar
-    int itemsToShow = 25; // Mostrar más items en la lista
-    int startIndex = floor(scrollOffset / 30.0f); // Calcular índice basado en scroll
+    // Calcular rango de items a mostrar
+    int itemsToShow = 15; // Reducir para evitar superposición
+    int startIndex = floor(scrollOffset / 25.0f);
     startIndex = ofClamp(startIndex, 0, pokemonListData["results"].size() - itemsToShow);
 
     for (int i = 0; i < itemsToShow; ++i) {
@@ -321,11 +287,21 @@ void ofApp::drawPokemonList() {
 
         string pokemonName = pokemonListData["results"][currentIndex]["name"].asString();
         
-        // Resaltar el seleccionado (si es visible)
-        ofColor textColorToUse = (currentIndex == selectedPokemonIndex) ? accentColor : textColor;
+        // Capitalizar nombre
+        if (!pokemonName.empty()) {
+            pokemonName[0] = toupper(pokemonName[0]);
+        }
         
-        drawText(ofToString(currentIndex + 1) + ". " + pokemonName, listX, listY, bodyFont, textColorToUse);
-        listY += 25;
+        // Resaltar si es el Pokémon actual
+        ofColor textColorToUse = (currentIndex + 1 == currentPokemonId) ? accentColor : textColor;
+        
+        drawText(ofToString(currentIndex + 1) + ". " + pokemonName, listX, listY, smallFont, textColorToUse);
+        listY += 20;
+    }
+    
+    // Indicador de scroll
+    if (pokemonListData["results"].size() > itemsToShow) {
+        drawText("↑↓ Scroll", listX, listY + 10, smallFont, ofColor(150));
     }
 }
 

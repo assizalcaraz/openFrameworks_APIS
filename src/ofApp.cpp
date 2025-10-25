@@ -340,11 +340,16 @@ void ofApp::drawUI() {
     
     // Mostrar instrucciones completas
     float instructionsY = ofGetHeight() - 80;
-    drawText("Controles:", 10, instructionsY, smallFont, ofColor(200));
-    drawText("N: Siguiente Pokémon (hasta el 151)", 10, instructionsY + 15, smallFont, ofColor(150));
-    drawText("P: Anterior Pokémon (desde el 1)", 10, instructionsY + 30, smallFont, ofColor(150));
-    drawText("R: Pokémon Aleatorio (1-151)", 10, instructionsY + 45, smallFont, ofColor(150));
-    drawText("L: Mostrar/Ocultar Lista (151 Pokémon)", 10, instructionsY + 60, smallFont, ofColor(150));
+    
+    // Usar ofDrawBitmapString directamente para asegurar que se muestre
+    ofSetColor(200);
+    ofDrawBitmapString("Controles:", 10, instructionsY);
+    
+    ofSetColor(150);
+    ofDrawBitmapString("N: Siguiente Pokemon (hasta el 151)", 10, instructionsY + 15);
+    ofDrawBitmapString("P: Anterior Pokemon (desde el 1)", 10, instructionsY + 30);
+    ofDrawBitmapString("R: Pokemon Aleatorio (1-151)", 10, instructionsY + 45);
+    ofDrawBitmapString("L: Mostrar/Ocultar Lista (151 Pokemon)", 10, instructionsY + 60);
 }
 
 //--------------------------------------------------------------

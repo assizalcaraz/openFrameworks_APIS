@@ -2,6 +2,12 @@
 
 Una aplicación de escritorio desarrollada en openFrameworks para explorar datos de Pokémon usando la PokéAPI.
 
+## 📸 Captura de Pantalla
+
+![PokéAPI Explorer](screenshot.png)
+
+*Interfaz de la aplicación mostrando información detallada de Squirtle (ID: 7) con controles de navegación y estadísticas base.*
+
 ## 🎮 Características
 
 - **Interfaz profesional** con `ofxGui` para controles nativos
